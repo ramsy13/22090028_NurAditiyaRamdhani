@@ -13,7 +13,7 @@ import koneksi.koneksi;
 
 /**
  *
- * @author ASUS
+ * @author Nur Aditiya Ramadhani
  */
 public class Pengunjung extends javax.swing.JFrame {
     private Connection conn= new koneksi().connect();
