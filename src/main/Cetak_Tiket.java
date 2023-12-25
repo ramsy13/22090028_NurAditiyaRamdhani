@@ -266,15 +266,13 @@ public class Cetak_Tiket extends javax.swing.JFrame {
     private void tblCtkMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCtkMouseClicked
         int bar = tblCtk.getSelectedRow();
         String a = tabmode.getValueAt(bar,0).toString();
-        String e = tabmode.getValueAt(bar,4).toString();
+        String e = tabmode.getValueAt(bar,1).toString();
         
         txtIDCtk.setText(a);
         if(e.equals("Bundling")){
-            cbBC.setSelectedItem(true);
-            cbBC.setSelectedItem(false);
+            cbBC.setSelectedItem("Bundling");
         }else{
-            cbBC.setSelectedItem(false);
-            cbBC.setSelectedItem(true);
+            cbBC.setSelectedItem("Non Bundling");
         }
     }//GEN-LAST:event_tblCtkMouseClicked
 
