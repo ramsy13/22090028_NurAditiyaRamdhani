@@ -49,7 +49,7 @@ public class Pengunjung extends javax.swing.JFrame {
      *
      */
     private void datatable(){
-        Object [] Baris = {"ID","Nama","Tanggal","No Telp","Kategori","Total Harga"};
+        Object [] Baris = {"ID","Nama","No Telp","Tanggal","Kategori","Total Harga"};
         tabmode = new DefaultTableModel(null, Baris);
         tbl_DP.setModel(tabmode);
         String sql = "SELECT * FROM data_pengunjung";
@@ -59,8 +59,8 @@ public class Pengunjung extends javax.swing.JFrame {
             while(hasil.next()){
                 String a = hasil.getString("ID");
                 String b = hasil.getString("NAMA");
-                String c = hasil.getString("Tanggal");
-                String d = hasil.getString("NO TELP"); 
+                String c = hasil.getString("NO_TELP");
+                String d = hasil.getString("Tanggal"); 
                 String e = hasil.getString("KATEGORI");
                 String f = hasil.getString("TOTAL HARGA");
                 
@@ -379,26 +379,30 @@ public class Pengunjung extends javax.swing.JFrame {
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
         try{
-            String sql = "Update data_pengunjung set NAMA=?,NO TELP=?,Tanggal=?,KATEGORI=?,TOTAL HARGA=? WHERE ID =?";
-            PreparedStatement stat = conn.prepareStatement(sql);
+        String sql = "UPDATE data_pengunjung SET NAMA=?, NO_TELP=?, Tanggal=?, KATEGORI=? WHERE ID=?";
+        PreparedStatement stat = conn.prepareStatement(sql);
         
-            stat.setString(2, txtNama.getText());
-            stat.setString(3, txtNT.getText());
-            stat.setString(4, txtTgl.getText());
-             String jkel="";
-            if(rkj1.isSelected()) jkel="Bundling";
-            else jkel = "Non Bundling";
-            stat.setString(5, jkel);
-            stat.setString(6,txtTH.getText());
-            
-            
-            stat.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Data Berhasil Diubah");
-            kosong();
-            datatable();
-            txtID.requestFocus();
-        }catch(Exception e){
-            JOptionPane.showMessageDialog(null,"Data gagal Diubah" +e); 
+        stat.setString(1, txtNama.getText());
+        stat.setString(2, txtNT.getText());
+        stat.setString(3, txtTgl.getText());
+        
+        String jkel = "";
+        if(rkj1.isSelected()) {
+            jkel = "Bundling";
+        } else {
+            jkel = "Non Bundling";
+        }
+        stat.setString(4, jkel);
+        
+        stat.setString(5, txtID.getText());
+        
+        stat.executeUpdate();
+        JOptionPane.showMessageDialog(null, "Data Berhasil Diubah");
+        kosong();
+        datatable();
+        txtID.requestFocus();
+    } catch(Exception e){
+        JOptionPane.showMessageDialog(null, "Data gagal Diubah" + e); 
     }//GEN-LAST:event_btnEditActionPerformed
 
     }
@@ -406,17 +410,15 @@ public class Pengunjung extends javax.swing.JFrame {
         String sql = "insert into data_pengunjung values (?,?,?,?,?,?)";
         try{
             PreparedStatement stat = conn.prepareStatement(sql);
-            stat.setString(0, txtID.getText());
-            stat.setString(1, txtNama.getText());
-            
+            stat.setString(1, txtID.getText());
+            stat.setString(2, txtNama.getText());
+            stat.setString(3, txtNT.getText());
+            stat.setString(4, txtTgl.getText());
             String jkel="";
             if(rkj1.isSelected()) jkel="Bundling";
             else jkel="Non Bundling";
-            stat.setString(4, jkel);
-            
-            stat.setString(2, txtNT.getText());
-            stat.setString(3, txtTgl.getText());
-            stat.setString(5,txtTH.getText());
+            stat.setString(5, jkel);
+            stat.setString(6,txtTH.getText());
             
             stat.executeUpdate();
             JOptionPane.showMessageDialog(null, "Data Berhasil Disimpan");
@@ -481,16 +483,14 @@ public class Pengunjung extends javax.swing.JFrame {
         txtID.setText(a);
         txtNama.setText(b);
         txtNT.setText(c);
-        
+        txtTgl.setText(d);
         if(e.equals("Bundling")){
             rkj1.setSelected(true);
             rkj2.setSelected(false);
-            
         }else{
             rkj1.setSelected(false);
             rkj2.setSelected(true);
         }
-        txtTgl.setText(d);
         txtTH.setText(f);
     }//GEN-LAST:event_tbl_DPMouseClicked
 
