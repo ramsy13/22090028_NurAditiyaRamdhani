@@ -4,14 +4,23 @@
  */
 package main;
 
+import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Window;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.logging.Logger;
 import java.util.logging.Level;
+import javax.imageio.ImageIO;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import koneksi.koneksi;
 import net.sourceforge.barbecue.Barcode;
@@ -76,6 +85,7 @@ public class Cetak_Tiket extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblCtk = new javax.swing.JTable();
         cbBC = new javax.swing.JComboBox<>();
+        btnExp = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -149,6 +159,14 @@ public class Cetak_Tiket extends javax.swing.JFrame {
             }
         });
 
+        btnExp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gambar/save_20px.png"))); // NOI18N
+        btnExp.setText("Export");
+        btnExp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExpActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -165,7 +183,10 @@ public class Cetak_Tiket extends javax.swing.JFrame {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(txtIDCtk)
                             .addComponent(cbBC, 0, 125, Short.MAX_VALUE)))
-                    .addComponent(btnPrintTkt))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(btnPrintTkt)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnExp)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 358, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(14, Short.MAX_VALUE))
@@ -185,7 +206,9 @@ public class Cetak_Tiket extends javax.swing.JFrame {
                             .addComponent(jLabel3)
                             .addComponent(cbBC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(14, 14, 14)
-                        .addComponent(btnPrintTkt)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnPrintTkt)
+                            .addComponent(btnExp))
                         .addGap(18, 18, 18)
                         .addComponent(lb_BC, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(22, Short.MAX_VALUE))
@@ -241,7 +264,7 @@ public class Cetak_Tiket extends javax.swing.JFrame {
         }
         return false;
     }
-
+    
     private void btnPrintTktActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintTktActionPerformed
 
         String id = txtIDCtk.getText().trim();
@@ -318,7 +341,47 @@ public class Cetak_Tiket extends javax.swing.JFrame {
     private void cbBCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbBCActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cbBCActionPerformed
-    
+
+    private void btnExpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExpActionPerformed
+        // TODO add your handling code here:
+        // Dapatkan ikon dari JLabel
+        Icon icon = lb_BC.getIcon();
+
+    // Pastikan ikon tidak null
+        if (icon != null && icon instanceof ImageIcon) {
+        // Dapatkan gambar dari ikon
+        Image barcodeImage = ((ImageIcon) icon).getImage();
+
+        // Dapatkan direktori tempat penyimpanan file
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Save Barcode Image");
+        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+        int userSelection = fileChooser.showSaveDialog(this);
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File selectedDirectory = fileChooser.getSelectedFile();
+            String filePath = selectedDirectory.getAbsolutePath() + File.separator + "barcode.png";
+
+            // Simpan gambar ke file PNG
+            try {
+                BufferedImage bufferedImage = new BufferedImage(barcodeImage.getWidth(null), barcodeImage.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+                Graphics2D g2 = bufferedImage.createGraphics();
+                g2.drawImage(barcodeImage, 0, 0, null);
+                g2.dispose();
+
+                ImageIO.write(bufferedImage, "png", new File(filePath));
+                JOptionPane.showMessageDialog(this, "Barcode exported successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+            } catch (IOException e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Error exporting barcode.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        } else {
+        JOptionPane.showMessageDialog(this, "Print the barcode first before exporting.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnExpActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -356,6 +419,7 @@ public class Cetak_Tiket extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnExp;
     private javax.swing.JButton btnPrintTkt;
     private javax.swing.JComboBox<String> cbBC;
     private javax.swing.JButton jButton1;
