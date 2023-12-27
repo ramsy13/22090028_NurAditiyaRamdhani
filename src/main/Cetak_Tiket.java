@@ -344,26 +344,24 @@ public class Cetak_Tiket extends javax.swing.JFrame {
 
     private void btnExpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExpActionPerformed
         // TODO add your handling code here:
-        // Dapatkan ikon dari JLabel
         Icon icon = lb_BC.getIcon();
 
-    // Pastikan ikon tidak null
-        if (icon != null && icon instanceof ImageIcon) {
-        // Dapatkan gambar dari ikon
+        if (icon != null && icon instanceof ImageIcon) {        
         Image barcodeImage = ((ImageIcon) icon).getImage();
 
-        // Dapatkan direktori tempat penyimpanan file
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Save Barcode Image");
-        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        String directoryPath = "C:\\Users\\ASUS\\Documents\\NetBeansProjects\\22090028_NurAditiyaRamadhani_3D\\src\\barcode";
+        File directory = new File(directoryPath);      
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+        String idBarcode = txtIDCtk.getText().trim();
+            if (idBarcode.equals("")) {
+                JOptionPane.showMessageDialog(this, "ID Barcode tidak valid.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            String fileName = idBarcode + ".png";
+            String filePath = directoryPath + File.separator + fileName;
 
-        int userSelection = fileChooser.showSaveDialog(this);
-
-        if (userSelection == JFileChooser.APPROVE_OPTION) {
-            File selectedDirectory = fileChooser.getSelectedFile();
-            String filePath = selectedDirectory.getAbsolutePath() + File.separator + "barcode.png";
-
-            // Simpan gambar ke file PNG
             try {
                 BufferedImage bufferedImage = new BufferedImage(barcodeImage.getWidth(null), barcodeImage.getHeight(null), BufferedImage.TYPE_INT_ARGB);
                 Graphics2D g2 = bufferedImage.createGraphics();
@@ -371,14 +369,13 @@ public class Cetak_Tiket extends javax.swing.JFrame {
                 g2.dispose();
 
                 ImageIO.write(bufferedImage, "png", new File(filePath));
-                JOptionPane.showMessageDialog(this, "Barcode exported successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Export Berhasil.", "Success", JOptionPane.INFORMATION_MESSAGE);
             } catch (IOException e) {
                 e.printStackTrace();
-                JOptionPane.showMessageDialog(this, "Error exporting barcode.", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Gagal MengExport.", "Error", JOptionPane.ERROR_MESSAGE);
             }
-        }
         } else {
-        JOptionPane.showMessageDialog(this, "Print the barcode first before exporting.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Print Barcode terlebih dahulu.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnExpActionPerformed
 
