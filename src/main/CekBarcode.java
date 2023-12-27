@@ -20,7 +20,7 @@ public class CekBarcode extends javax.swing.JFrame {
     DefaultTableModel model;
     public CekBarcode() {
         initComponents();
-        Object[] kolom = {"ID", "KATEGORI"};
+        Object[] kolom = {"ID","NAMA","NO_TELP","Tanggal", "KATEGORI","TOTAL HARGA"};
         Object[][] data = null;
         model = new DefaultTableModel(data, kolom);
         tbCekBC.setModel(model);
@@ -161,8 +161,12 @@ public class CekBarcode extends javax.swing.JFrame {
 
         if (rs.next()) {
             String ID = rs.getString("ID");
+            String NAMA = rs.getString("NAMA");
+            String NO_TELP = rs.getString("NO_TELP");
+            String Tanggal = rs.getString("Tanggal");
             String KATEGORI = rs.getString("KATEGORI");
-            model.addRow(new Object[]{ID, KATEGORI});
+            String TOTAL_HARGA = rs.getString("TOTAL HARGA");
+            model.addRow(new Object[]{ID,NAMA,NO_TELP,Tanggal,KATEGORI,TOTAL_HARGA});
             txtIDBC.setText("");
             txtIDBC.requestFocus();
         } else {
